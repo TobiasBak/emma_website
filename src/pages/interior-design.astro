@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Placeholder data for interior design
+const designs = [
+  {
+    id: 1,
+    title: 'Minimalist Living Room',
+    category: 'Residential',
+    image: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    id: 2,
+    title: 'Modern Kitchen',
+    category: 'Renovation',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    id: 3,
+    title: 'Cozy Bedroom',
+    category: 'Styling',
+    image: 'https://images.unsplash.com/photo-1522771753035-0a1533890654?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    id: 4,
+    title: 'Scandinavian Workspace',
+    category: 'Office',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600&auto=format&fit=crop',
+  },
+   {
+    id: 5,
+    title: 'Boho Chic Patio',
+    category: 'Outdoor',
+    image: 'https://images.unsplash.com/photo-1595558171673-e794827051f6?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    id: 6,
+    title: 'Industrial Loft',
+    category: 'Residential',
+    image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=600&auto=format&fit=crop',
+  }
+];
+---
+
+<Layout title="Interior Design">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-serif font-bold text-gray-900 mb-4">Interior Design Portfolio</h1>
+      <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+        Creating spaces that inspire and comfort. A collection of my work in residential and commercial styling.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {designs.map((design) => (
+        <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative h-80 overflow-hidden">
+             <img 
+              src={design.image} 
+              alt={design.title}
+              class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <div class="p-6">
+            <p class="text-sm text-indigo-600 font-semibold tracking-wide uppercase">{design.category}</p>
+            <h3 class="mt-2 text-xl font-bold text-gray-900">{design.title}</h3>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

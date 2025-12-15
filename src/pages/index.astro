@@ -1,11 +1,78 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Placeholder data for trips
+const trips = [
+  {
+    id: 1,
+    title: 'Summer in Italy',
+    location: 'Amalfi Coast',
+    image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop',
+    date: 'June 2024'
+  },
+  {
+    id: 2,
+    title: 'Hiking the Alps',
+    location: 'Switzerland',
+    image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=600&auto=format&fit=crop',
+    date: 'August 2024'
+  },
+  {
+    id: 3,
+    title: 'City Lights',
+    location: 'Tokyo, Japan',
+    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=600&auto=format&fit=crop',
+    date: 'October 2023'
+  },
+  {
+    id: 4,
+    title: 'Desert Vibes',
+    location: 'Joshua Tree',
+    image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=600&auto=format&fit=crop',
+    date: 'March 2024'
+  },
+  {
+    id: 5,
+    title: 'Island Hopping',
+    location: 'Greece',
+    image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop', // Reusing placeholder
+    date: 'July 2023'
+  },
+  {
+    id: 6,
+    title: 'Nordic Escape',
+    location: 'Iceland',
+    image: 'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=600&auto=format&fit=crop',
+    date: 'December 2023'
+  }
+];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Home">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-serif font-bold text-gray-900 mb-4">Travel Journal</h1>
+      <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+        Collecting moments and memories from around the world. Here are some snapshots from my recent adventures.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {trips.map((trip) => (
+        <div class="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div class="aspect-w-3 aspect-h-4 bg-gray-200">
+             <img 
+              src={trip.image} 
+              alt={trip.title}
+              class="object-cover w-full h-96 group-hover:scale-105 transition-transform duration-500 ease-in-out"
+            />
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
+            <h3 class="text-xl font-bold">{trip.title}</h3>
+            <p class="text-sm font-medium opacity-90">{trip.location} &bull; {trip.date}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
 </Layout>

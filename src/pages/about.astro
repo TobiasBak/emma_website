@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About Me">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+      <!-- Profile Image Placeholder -->
+      <div class="relative mb-10 lg:mb-0">
+         <div class="w-full h-96 lg:h-[600px] bg-gray-200 rounded-lg overflow-hidden shadow-xl">
+             <img 
+              src="https://images.unsplash.com/photo-1554151228-14d9def656ec?q=80&w=600&auto=format&fit=crop" 
+              alt="Emma" 
+              class="w-full h-full object-cover"
+            />
+         </div>
+      </div>
+
+      <div>
+        <h1 class="text-4xl font-serif font-bold text-gray-900 mb-6">Hello, I'm Emma.</h1>
+        
+        <div class="prose prose-lg text-gray-500">
+          <p>
+            Welcome to my little corner of the internet. I'm a passionate traveler and aspiring interior designer based in [City, Country].
+          </p>
+          <p>
+            Photography has always been my way of documenting the beauty I see in the world, whether it's a breathtaking landscape in a foreign country or a perfectly curated corner in a living room.
+          </p>
+          <p>
+            When I'm not exploring new cities or styling spaces, you can find me [Hobby 1], [Hobby 2], or hunting for the best coffee in town.
+          </p>
+          
+          <h3 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">My Journey</h3>
+          <p>
+            It all started when... [Add more personal story here]. This website serves as a creative outlet to share my visual diary and professional portfolio.
+          </p>
+        </div>
+
+        <div class="mt-10">
+          <a href="/contact" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
