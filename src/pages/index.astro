@@ -91,16 +91,32 @@ const trips = [
   <!-- Lightbox Modal -->
   <div id="lightbox" class="fixed inset-0 z-[100] hidden bg-black/90 backdrop-blur-sm transition-opacity duration-300 opacity-0" aria-hidden="true">
     <!-- Close button -->
-    <button id="lightbox-close" class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none z-50">
-      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <button id="lightbox-close" class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none z-50 p-2">
+      <span class="sr-only">Close</span>
+      <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Navigation Buttons -->
+    <button id="lightbox-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 focus:outline-none z-50 p-4 hidden sm:block">
+      <span class="sr-only">Previous</span>
+      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    
+    <button id="lightbox-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 focus:outline-none z-50 p-4 hidden sm:block">
+      <span class="sr-only">Next</span>
+      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>
     </button>
 
     <!-- Content -->
     <div class="flex items-center justify-center h-full w-full p-4">
-      <img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl rounded-sm transform scale-95 transition-transform duration-300" />
-      <div class="absolute bottom-8 left-0 right-0 text-center text-white pointer-events-none">
+      <img id="lightbox-img" src="" alt="" class="max-h-[85vh] max-w-[90vw] object-contain shadow-2xl rounded-sm transform scale-95 transition-transform duration-300 select-none" />
+      <div class="absolute bottom-8 left-0 right-0 text-center text-white pointer-events-none px-4">
           <h3 id="lightbox-title" class="text-2xl font-serif font-bold tracking-wide"></h3>
           <p id="lightbox-location" class="text-lg opacity-80 mt-2"></p>
       </div>
@@ -128,6 +144,9 @@ const trips = [
     }, observerOptions);
 
     const cards = document.querySelectorAll('.trip-card');
+    const cardsArray = Array.from(cards);
+    let currentImageIndex = 0;
+
     cards.forEach((card, index) => {
       // Stagger animations slightly
       (card as HTMLElement).style.transitionDelay = `${index * 100}ms`;
@@ -140,13 +159,34 @@ const trips = [
     const lightboxTitle = document.getElementById('lightbox-title');
     const lightboxLocation = document.getElementById('lightbox-location');
     const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
 
-    if (!lightbox || !lightboxImg || !closeBtn) return;
+    if (!lightbox || !lightboxImg || !closeBtn || !prevBtn || !nextBtn) return;
 
-    const openLightbox = (src: string, title: string, location: string) => {
-      lightboxImg.src = src;
-      if (lightboxTitle) lightboxTitle.textContent = title;
-      if (lightboxLocation) lightboxLocation.textContent = location;
+    const updateLightboxImage = (index: number) => {
+        const card = cardsArray[index];
+        if (!card) return;
+
+        const imgUrl = card.getAttribute('data-full-res');
+        const title = card.getAttribute('data-title') || '';
+        const location = card.getAttribute('data-location') || '';
+
+        // Add a fade out/in effect for image change could be nice, but simple switch for now
+        lightboxImg.style.opacity = '0.5';
+        
+        setTimeout(() => {
+            if (imgUrl) lightboxImg.src = imgUrl;
+            if (lightboxTitle) lightboxTitle.textContent = title;
+            if (lightboxLocation) lightboxLocation.textContent = location;
+            lightboxImg.style.opacity = '1';
+        }, 150);
+
+        currentImageIndex = index;
+    };
+
+    const openLightbox = (index: number) => {
+      updateLightboxImage(index);
       
       lightbox.classList.remove('hidden');
       // Small timeout to allow display:block to apply before changing opacity for transition
@@ -170,34 +210,55 @@ const trips = [
       }, 300);
     };
 
+    const showNext = (e?: Event) => {
+        e?.stopPropagation();
+        let newIndex = currentImageIndex + 1;
+        if (newIndex >= cardsArray.length) newIndex = 0; // Loop to start
+        updateLightboxImage(newIndex);
+    };
+
+    const showPrev = (e?: Event) => {
+        e?.stopPropagation();
+        let newIndex = currentImageIndex - 1;
+        if (newIndex < 0) newIndex = cardsArray.length - 1; // Loop to end
+        updateLightboxImage(newIndex);
+    };
+
     // Attach click events to cards
-    cards.forEach(card => {
+    cards.forEach((card, index) => {
       card.addEventListener('click', () => {
-        const imgUrl = card.getAttribute('data-full-res');
-        const title = card.getAttribute('data-title') || '';
-        const location = card.getAttribute('data-location') || '';
-        if (imgUrl) openLightbox(imgUrl, title, location);
+        openLightbox(index);
       });
     });
 
     // Close events
     closeBtn.addEventListener('click', closeLightbox);
     
+    // Navigation events
+    nextBtn.addEventListener('click', showNext);
+    prevBtn.addEventListener('click', showPrev);
+
     // Close on background click
     lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox || (e.target as HTMLElement).closest('.flex')) {
-         // If clicking the wrapper flex container (but not image itself, wait, image is inside flex)
-         // Actually better to check if target is NOT the image
-         if (e.target !== lightboxImg) {
-             closeLightbox();
-         }
-      }
+        const target = e.target as HTMLElement;
+        // Close if clicking outside the image and not on buttons
+        if (target === lightbox || target.closest('.flex')) {
+             if (target !== lightboxImg && !target.closest('button')) {
+                 closeLightbox();
+             }
+        }
     });
 
-    // Close on Escape key
+    // Keyboard events
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+      if (lightbox.classList.contains('hidden')) return;
+
+      if (e.key === 'Escape') {
         closeLightbox();
+      } else if (e.key === 'ArrowRight') {
+        showNext();
+      } else if (e.key === 'ArrowLeft') {
+        showPrev();
       }
     });
   }
