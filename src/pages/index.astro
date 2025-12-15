@@ -164,6 +164,11 @@ const trips = [
 
     if (!lightbox || !lightboxImg || !closeBtn || !prevBtn || !nextBtn) return;
 
+    const preloadImage = (url: string) => {
+        const img = new Image();
+        img.src = url;
+    };
+
     const updateLightboxImage = (index: number) => {
         const card = cardsArray[index];
         if (!card) return;
@@ -172,7 +177,7 @@ const trips = [
         const title = card.getAttribute('data-title') || '';
         const location = card.getAttribute('data-location') || '';
 
-        // Add a fade out/in effect for image change could be nice, but simple switch for now
+        // Add a fade out/in effect for image change
         lightboxImg.style.opacity = '0.5';
         
         setTimeout(() => {
@@ -183,6 +188,16 @@ const trips = [
         }, 150);
 
         currentImageIndex = index;
+
+        // Preload adjacent images
+        const nextIndex = (index + 1) % cardsArray.length;
+        const prevIndex = (index - 1 + cardsArray.length) % cardsArray.length;
+        
+        const nextUrl = cardsArray[nextIndex]?.getAttribute('data-full-res');
+        const prevUrl = cardsArray[prevIndex]?.getAttribute('data-full-res');
+
+        if (nextUrl) preloadImage(nextUrl);
+        if (prevUrl) preloadImage(prevUrl);
     };
 
     const openLightbox = (index: number) => {
