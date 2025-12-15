@@ -3,12 +3,12 @@ import { Image } from 'astro:assets';
 import instagramIcon from '../assets/instagram.svg';
 import linkedinIcon from '../assets/linkedin.svg';
 ---
-<nav class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors duration-300">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav class="nav-bar">
+  <div class="nav-container">
     <div class="flex justify-between h-16">
       <div class="flex">
         <div class="flex-shrink-0 flex items-center">
-          <a href="/" class="text-2xl font-serif font-bold text-gray-900 dark:text-white tracking-wider">EMMA</a>
+          <a href="/" class="nav-logo">EMMA</a>
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center">
           <a href="/" class="nav-link">
@@ -29,22 +29,22 @@ import linkedinIcon from '../assets/linkedin.svg';
       <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-6">
         <!-- Day/Night Toggle -->
         <div class="flex items-center space-x-2">
-            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Day</span>
+            <span class="text-xs font-medium text-text-muted">Day</span>
             <label for="nav-theme-toggle" class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="nav-theme-toggle" class="sr-only peer">
-            <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+            <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent-primary dark:peer-focus:ring-accent-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent-primary"></div>
             </label>
-            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Night</span>
+            <span class="text-xs font-medium text-text-muted">Night</span>
         </div>
 
         <!-- Social Icons (Desktop) -->
         <div class="flex items-center space-x-4">
-            <a href="#" class="text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300">
+            <a href="#" class="nav-icon">
             <span class="sr-only">Instagram</span>
             <Image src={instagramIcon} alt="Instagram" class="h-6 w-6" />
             </a>
 
-            <a href="#" class="text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300">
+            <a href="#" class="nav-icon">
             <span class="sr-only">LinkedIn</span>
             <Image src={linkedinIcon} alt="LinkedIn" class="h-6 w-6" />
             </a>
@@ -53,7 +53,7 @@ import linkedinIcon from '../assets/linkedin.svg';
 
       <!-- Mobile menu button placeholder (simple version) -->
       <div class="-mr-2 flex items-center sm:hidden">
-        <button type="button" class="bg-white dark:bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
+        <button type="button" class="bg-bg-surface inline-flex items-center justify-center p-2 rounded-md text-text-muted hover:text-text-main hover:bg-bg-surface-alt focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-primary" aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only">Open main menu</span>
           <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -64,12 +64,12 @@ import linkedinIcon from '../assets/linkedin.svg';
   </div>
 
   <!-- Mobile Menu (Hidden by default, simple implementation for now) -->
-  <div class="sm:hidden hidden bg-white dark:bg-gray-800 border-b dark:border-gray-700" id="mobile-menu">
+  <div class="sm:hidden hidden nav-mobile-menu" id="mobile-menu">
     <div class="pt-2 pb-3 space-y-1">
-      <a href="/" class="bg-indigo-50 dark:bg-gray-700 border-indigo-500 text-indigo-700 dark:text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
-      <a href="/interior-design" class="border-transparent text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Interior Design</a>
-      <a href="/about" class="border-transparent text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium">About</a>
-      <a href="/contact" class="border-transparent text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Contact</a>
+      <a href="/" class="bg-indigo-50 dark:bg-gray-700 border-accent-primary text-accent-primary block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+      <a href="/interior-design" class="nav-link-mobile">Interior Design</a>
+      <a href="/about" class="nav-link-mobile">About</a>
+      <a href="/contact" class="nav-link-mobile">Contact</a>
     </div>
   </div>
 </nav>

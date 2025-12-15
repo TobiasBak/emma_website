@@ -2,41 +2,168 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@layer components {
-  /* Navigation */
-  .nav-link {
-    @apply border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium;
-  }
+/* =========================================
+   Color Scheme & Variables
+   ========================================= */
+@theme {
+  --color-bg-body: var(--bg-body);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-alt: var(--bg-surface-alt);
   
-  .nav-link-mobile {
-    @apply border-transparent text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 hover:text-gray-700 dark:hover:text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium;
-  }
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  
+  --color-border-main: var(--border-main);
+  
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-hover: var(--accent-hover);
+}
 
-  .footer-link {
-    @apply text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white;
-  }
+:root {
+  /* Light Mode Colors */
+  --bg-body: #f9fafb; /* gray-50 */
+  --bg-surface: #ffffff; /* white */
+  --bg-surface-alt: #f3f4f6; /* gray-100 */
+  
+  --text-main: #111827; /* gray-900 */
+  --text-muted: #6b7280; /* gray-500 */
+  --text-inverse: #ffffff;
+  
+  --border-main: #e5e7eb; /* gray-200 */
+  
+  --accent-primary: #4f46e5; /* indigo-600 */
+  --accent-hover: #4338ca; /* indigo-700 */
+}
 
-  /* Buttons */
-  .btn-primary {
-    @apply w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900;
-  }
+.dark {
+  /* Dark Mode Colors */
+  --bg-body: #111827; /* gray-900 */
+  --bg-surface: #1f2937; /* gray-800 */
+  --bg-surface-alt: #374151; /* gray-700 */
+  
+  --text-main: #f9fafb; /* gray-50 */
+  --text-muted: #d1d5db; /* gray-300 */
+  /* text-inverse stays white usually, or dark gray if on light background */
+  
+  --border-main: #374151; /* gray-700 */
+  
+  --accent-primary: #6366f1; /* indigo-500 - slightly lighter for dark mode visibility */
+  --accent-hover: #818cf8; /* indigo-400 */
+}
 
-  /* Cards */
-  .trip-card-base {
-    @apply relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-500 cursor-zoom-in dark:shadow-gray-900;
-  }
-
-  .design-card {
-    @apply bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow;
-  }
-
-  /* Inputs */
-  .input-field {
-    @apply shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 rounded-md p-2 border dark:bg-gray-700 dark:text-white;
+@layer base {
+  body {
+    @apply bg-bg-body text-text-main font-sans transition-colors duration-300;
   }
 }
 
-/* Animations */
+@layer components {
+  /* --- Layout & Common --- */
+  .page-container {
+    @apply max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-header {
+    @apply text-center mb-12;
+  }
+
+  .page-title {
+    @apply text-4xl font-serif font-bold text-text-main mb-4;
+  }
+
+  .page-subtitle {
+    @apply text-lg text-text-muted max-w-2xl mx-auto;
+  }
+
+  /* --- Navigation --- */
+  .nav-bar {
+    @apply bg-bg-surface border-b border-border-main shadow-sm sticky top-0 z-50 transition-colors duration-300;
+  }
+
+  .nav-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .nav-logo {
+    @apply text-2xl font-serif font-bold text-text-main tracking-wider;
+  }
+
+  .nav-link {
+    @apply border-transparent text-text-muted hover:border-border-main hover:text-text-main inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors;
+  }
+  
+  .nav-link-mobile {
+    @apply border-transparent text-text-muted hover:bg-bg-surface-alt hover:border-border-main hover:text-text-main block pl-3 pr-4 py-2 border-l-4 text-base font-medium transition-colors;
+  }
+
+  .nav-icon {
+    @apply text-text-muted hover:text-text-main transition-colors;
+  }
+
+  .nav-mobile-menu {
+    @apply bg-bg-surface border-b border-border-main;
+  }
+
+  /* --- Footer --- */
+  .footer-base {
+    @apply bg-bg-surface border-t border-border-main mt-auto transition-colors duration-300;
+  }
+
+  .footer-link {
+    @apply text-base text-text-muted hover:text-text-main transition-colors;
+  }
+
+  /* --- Buttons & Inputs --- */
+  .btn-primary {
+    @apply w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent-primary hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-primary dark:focus:ring-offset-bg-body transition-colors;
+  }
+
+  .btn-secondary-link {
+    @apply text-accent-primary hover:text-accent-hover font-medium transition-colors;
+  }
+
+  .input-label {
+    @apply block text-sm font-medium text-text-main;
+  }
+
+  .input-field {
+    @apply shadow-sm focus:ring-accent-primary focus:border-accent-primary block w-full sm:text-sm border-border-main rounded-md p-2 border bg-bg-surface text-text-main;
+  }
+
+  /* --- Cards (Trips & Design) --- */
+  .trip-card-base {
+    @apply relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-500 cursor-zoom-in dark:shadow-black/50;
+  }
+
+  .design-card {
+    @apply bg-bg-surface rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  .design-card-category {
+    @apply text-sm text-accent-primary font-semibold tracking-wide uppercase;
+  }
+
+  .design-card-title {
+    @apply mt-2 text-xl font-bold text-text-main;
+  }
+
+  /* --- About Page --- */
+  .prose-text {
+    @apply text-text-muted;
+  }
+  
+  .prose-text p {
+    @apply mb-4;
+  }
+
+  /* --- Contact Page --- */
+  .contact-form-container {
+    @apply bg-bg-surface shadow overflow-hidden sm:rounded-lg;
+  }
+}
+
+/* --- Animations --- */
 @keyframes fadeInDown {
   from {
     opacity: 0;
