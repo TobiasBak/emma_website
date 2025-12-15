@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { houses } from '../../data/houses';
+
+export function getStaticPaths() {
+  return houses.map((house) => ({
+    params: { id: house.id },
+    props: { house },
+  }));
+}
+
+const { house } = Astro.props;
+---
+
+<Layout title={house.title}>
+  <div class="page-container">
+    <a href="/real-estate" class="inline-flex items-center text-gray-600 hover:text-black mb-8 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Listings
+    </a>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+      <div class="space-y-6">
+        <div class="h-[400px] overflow-hidden rounded-lg">
+           <img 
+            src={house.image} 
+            alt={house.title}
+            class="w-full h-full object-cover"
+            transition:name={`image-${house.id}`}
+          />
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+            {house.images.map((img, index) => (
+                <div class="h-24 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src={img} alt={`${house.title} view ${index + 1}`} class="w-full h-full object-cover" />
+                </div>
+            ))}
+        </div>
+      </div>
+
+      <div>
+        <div class="flex flex-col h-full justify-center">
+            <span class="text-primary font-medium tracking-wider uppercase mb-2">{house.category}</span>
+            <h1 class="text-4xl font-light mb-4">{house.title}</h1>
+            <p class="text-2xl font-light text-gray-900 mb-6">{house.price}</p>
+            
+            <div class="flex items-center text-gray-600 mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                {house.location}
+            </div>
+
+            <div class="prose max-w-none text-gray-600 mb-8">
+                <p>{house.description}</p>
+            </div>
+
+            <div class="border-t border-gray-200 pt-8">
+                <h3 class="text-lg font-medium mb-4">Property Features</h3>
+                <ul class="grid grid-cols-2 gap-4">
+                    {house.features.map(feature => (
+                        <li class="flex items-center text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            {feature}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
