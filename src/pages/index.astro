@@ -8,6 +8,7 @@ const trips = [
     title: 'Summer in Italy',
     location: 'Amalfi Coast',
     image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop',
+    fullRes: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
     date: 'June 2024'
   },
   {
@@ -15,6 +16,7 @@ const trips = [
     title: 'Hiking the Alps',
     location: 'Switzerland',
     image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=600&auto=format&fit=crop',
+    fullRes: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1600&auto=format&fit=crop',
     date: 'August 2024'
   },
   {
@@ -22,6 +24,7 @@ const trips = [
     title: 'City Lights',
     location: 'Tokyo, Japan',
     image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=600&auto=format&fit=crop',
+    fullRes: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1600&auto=format&fit=crop',
     date: 'October 2023'
   },
   {
@@ -29,6 +32,7 @@ const trips = [
     title: 'Desert Vibes',
     location: 'Joshua Tree',
     image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=600&auto=format&fit=crop',
+    fullRes: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=1600&auto=format&fit=crop',
     date: 'March 2024'
   },
   {
@@ -36,6 +40,7 @@ const trips = [
     title: 'Island Hopping',
     location: 'Greece',
     image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop', // Reusing placeholder
+    fullRes: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
     date: 'July 2023'
   },
   {
@@ -43,6 +48,7 @@ const trips = [
     title: 'Nordic Escape',
     location: 'Iceland',
     image: 'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=600&auto=format&fit=crop',
+    fullRes: 'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1600&auto=format&fit=crop',
     date: 'December 2023'
   }
 ];
@@ -50,24 +56,30 @@ const trips = [
 
 <Layout title="Home">
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
+    <div class="text-center mb-12 animate-fade-in-down">
       <h1 class="text-4xl font-serif font-bold text-gray-900 mb-4">Travel Journal</h1>
       <p class="text-lg text-gray-500 max-w-2xl mx-auto">
         Collecting moments and memories from around the world. Here are some snapshots from my recent adventures.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="trips-grid">
       {trips.map((trip) => (
-        <div class="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div 
+          class="trip-card group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-500 opacity-0 translate-y-8 cursor-zoom-in"
+          data-full-res={trip.fullRes}
+          data-title={trip.title}
+          data-location={trip.location}
+        >
           <div class="aspect-w-3 aspect-h-4 bg-gray-200">
              <img 
               src={trip.image} 
               alt={trip.title}
-              class="object-cover w-full h-96 group-hover:scale-105 transition-transform duration-500 ease-in-out"
+              class="object-cover w-full h-96 group-hover:scale-105 transition-transform duration-700 ease-in-out"
+              loading="lazy"
             />
           </div>
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
+          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             <h3 class="text-xl font-bold">{trip.title}</h3>
             <p class="text-sm font-medium opacity-90">{trip.location} &bull; {trip.date}</p>
           </div>
@@ -75,4 +87,142 @@ const trips = [
       ))}
     </div>
   </div>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="fixed inset-0 z-[100] hidden bg-black/90 backdrop-blur-sm transition-opacity duration-300 opacity-0" aria-hidden="true">
+    <!-- Close button -->
+    <button id="lightbox-close" class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none z-50">
+      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Content -->
+    <div class="flex items-center justify-center h-full w-full p-4">
+      <img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl rounded-sm transform scale-95 transition-transform duration-300" />
+      <div class="absolute bottom-8 left-0 right-0 text-center text-white pointer-events-none">
+          <h3 id="lightbox-title" class="text-2xl font-serif font-bold tracking-wide"></h3>
+          <p id="lightbox-location" class="text-lg opacity-80 mt-2"></p>
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<script>
+  // Function to setup all interactivity
+  function setupInteractivity() {
+    // --- Scroll Animations ---
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-8');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    const cards = document.querySelectorAll('.trip-card');
+    cards.forEach((card, index) => {
+      // Stagger animations slightly
+      (card as HTMLElement).style.transitionDelay = `${index * 100}ms`;
+      observer.observe(card);
+    });
+
+    // --- Lightbox ---
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+    const lightboxTitle = document.getElementById('lightbox-title');
+    const lightboxLocation = document.getElementById('lightbox-location');
+    const closeBtn = document.getElementById('lightbox-close');
+
+    if (!lightbox || !lightboxImg || !closeBtn) return;
+
+    const openLightbox = (src: string, title: string, location: string) => {
+      lightboxImg.src = src;
+      if (lightboxTitle) lightboxTitle.textContent = title;
+      if (lightboxLocation) lightboxLocation.textContent = location;
+      
+      lightbox.classList.remove('hidden');
+      // Small timeout to allow display:block to apply before changing opacity for transition
+      requestAnimationFrame(() => {
+        lightbox.classList.remove('opacity-0');
+        lightboxImg.classList.remove('scale-95');
+        lightboxImg.classList.add('scale-100');
+      });
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    };
+
+    const closeLightbox = () => {
+      lightbox.classList.add('opacity-0');
+      lightboxImg.classList.remove('scale-100');
+      lightboxImg.classList.add('scale-95');
+      
+      setTimeout(() => {
+        lightbox.classList.add('hidden');
+        lightboxImg.src = '';
+        document.body.style.overflow = ''; // Restore scrolling
+      }, 300);
+    };
+
+    // Attach click events to cards
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const imgUrl = card.getAttribute('data-full-res');
+        const title = card.getAttribute('data-title') || '';
+        const location = card.getAttribute('data-location') || '';
+        if (imgUrl) openLightbox(imgUrl, title, location);
+      });
+    });
+
+    // Close events
+    closeBtn.addEventListener('click', closeLightbox);
+    
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || (e.target as HTMLElement).closest('.flex')) {
+         // If clicking the wrapper flex container (but not image itself, wait, image is inside flex)
+         // Actually better to check if target is NOT the image
+         if (e.target !== lightboxImg) {
+             closeLightbox();
+         }
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+        closeLightbox();
+      }
+    });
+  }
+
+  // Run on initial load
+  setupInteractivity();
+
+  // Run on view transition navigation
+  document.addEventListener('astro:page-load', setupInteractivity);
+</script>
+
+<style>
+  /* Simple fade in down animation for the header */
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out;
+  }
+</style>
