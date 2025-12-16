@@ -2,6 +2,51 @@
 import Layout from '../layouts/Layout.astro';
 import { trips } from '../data/trips';
 
+// Load all images eagerly
+const dayImages = import.meta.glob('../assets/images/day/*.{jpg,jpeg,png,webp}', { eager: true });
+const nightImages = import.meta.glob('../assets/images/night/*.{jpg,jpeg,png,webp}', { eager: true });
+
+// Helper to process images
+const processImages = (imagesRecord, isNightFolder) => {
+  return Object.entries(imagesRecord).map(([path, module]) => {
+    // Extract filename from path (e.g., "../assets/images/day/photo.jpg" -> "photo.jpg")
+    const filename = path.split('/').pop();
+    
+    // Find metadata
+    const meta = trips.find(t => t.filename === filename);
+    
+    // Get image source (module.default for default export in Astro/Vite)
+    // Cast to any because the type isn't strictly defined in this context without extra setup
+    const imageSrc = (module as any).default;
+
+    return {
+      id: meta?.id || filename, // Use filename as fallback ID
+      title: meta?.title || 'Untitled',
+      location: meta?.location || 'Unknown Location',
+      image: imageSrc,
+      fullRes: imageSrc.src, 
+      date: meta?.date || '',
+      isNight: isNightFolder, // Enforce folder source for logic
+      size: meta?.size || 'normal'
+    };
+  });
+};
+
+const dayTrips = processImages(dayImages, false);
+const nightTrips = processImages(nightImages, true);
+
+// Combine and sort
+const allTrips = [...dayTrips, ...nightTrips].sort((a, b) => {
+    // If both have numeric IDs from data, sort by ID to maintain original curated order
+    if (typeof a.id === 'number' && typeof b.id === 'number') {
+        return a.id - b.id;
+    }
+    // If only one has ID, prioritize it? Or just keep them mixed.
+    if (typeof a.id === 'number') return -1;
+    if (typeof b.id === 'number') return 1;
+    return 0;
+});
+
 const getSizeClass = (size) => {
   switch (size) {
     case 'wide': return 'md:col-span-2';
@@ -22,7 +67,7 @@ const getSizeClass = (size) => {
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 grid-flow-dense" id="trips-grid">
-      {trips.map((trip) => (
+      {allTrips.map((trip) => (
         <div 
           class={`trip-card trip-card-base group opacity-0 translate-y-8 ${getSizeClass(trip.size)}`}
           data-full-res={trip.image.src}
