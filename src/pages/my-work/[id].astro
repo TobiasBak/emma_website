@@ -13,6 +13,34 @@ const { house } = Astro.props;
 ---
 
 <Layout title={house.title}>
+  <!-- Lightbox (hidden by default) -->
+  <div id="lightbox" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-sm transition-opacity duration-300 opacity-0" role="dialog" aria-modal="true">
+     <button id="lightbox-close" class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none z-50 p-2">
+      <span class="sr-only">Close</span>
+      <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <button id="lightbox-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 focus:outline-none z-50 p-4 hidden sm:block">
+      <span class="sr-only">Previous</span>
+      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    
+    <button id="lightbox-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 focus:outline-none z-50 p-4 hidden sm:block">
+      <span class="sr-only">Next</span>
+      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+
+    <div class="flex items-center justify-center h-full w-full p-4">
+      <img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl transition-transform duration-300 scale-95" />
+    </div>
+  </div>
+
   <div class="page-container">
     <a href="/my-work" class="inline-flex items-center text-gray-600 hover:text-black mb-8 transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -23,17 +51,43 @@ const { house } = Astro.props;
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
       <div class="space-y-6">
-        <div class="h-[400px] overflow-hidden rounded-lg">
+        <!-- Main Image with Arrows -->
+        <div class="relative h-[400px] overflow-hidden rounded-lg group">
            <img 
-            src={house.image} 
+            id="main-image"
+            src={house.images[0]} 
             alt={house.title}
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover cursor-zoom-in transition-all duration-300"
             transition:name={`image-${house.id}`}
           />
+          
+          <!-- On-page Arrows -->
+          <button id="gallery-prev" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white">
+            <span class="sr-only">Previous</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button id="gallery-next" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white">
+            <span class="sr-only">Next</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <!-- Index Indicator -->
+          <div class="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+             <span id="current-index">1</span> / {house.images.length}
+          </div>
         </div>
+
+        <!-- Thumbnails -->
         <div class="grid grid-cols-3 gap-4">
             {house.images.map((img, index) => (
-                <div class="h-24 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                <div 
+                  class="thumbnail h-24 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-all ring-2 ring-transparent"
+                  data-index={index}
+                >
                     <img src={img} alt={`${house.title} view ${index + 1}`} class="w-full h-full object-cover" />
                 </div>
             ))}
@@ -44,7 +98,6 @@ const { house } = Astro.props;
         <div class="flex flex-col h-full justify-center">
             <span class="text-primary font-medium tracking-wider uppercase mb-2">{house.category}</span>
             <h1 class="text-4xl font-light mb-4">{house.title}</h1>
-
             
             <div class="flex items-center text-gray-600 mb-8">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,3 +129,145 @@ const { house } = Astro.props;
     </div>
   </div>
 </Layout>
+
+<script define:vars={{ images: house.images }}>
+  function setupGallery() {
+    let currentIndex = 0;
+    const totalImages = images.length;
+
+    // Elements
+    const mainImage = document.getElementById('main-image');
+    const galleryPrev = document.getElementById('gallery-prev');
+    const galleryNext = document.getElementById('gallery-next');
+    const indexDisplay = document.getElementById('current-index');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lbClose = document.getElementById('lightbox-close');
+    const lbPrev = document.getElementById('lightbox-prev');
+    const lbNext = document.getElementById('lightbox-next');
+
+    // Helper: Update View
+    function updateView(newIndex) {
+        if (newIndex < 0) newIndex = totalImages - 1;
+        if (newIndex >= totalImages) newIndex = 0;
+        
+        currentIndex = newIndex;
+        
+        // Update Main Image
+        mainImage.style.opacity = '0.5';
+        setTimeout(() => {
+            mainImage.src = images[currentIndex];
+            mainImage.style.opacity = '1';
+        }, 150);
+
+        // Update Counter
+        if (indexDisplay) indexDisplay.textContent = currentIndex + 1;
+
+        // Update Thumbnails
+        thumbnails.forEach((thumb, idx) => {
+            if (idx === currentIndex) {
+                thumb.classList.add('ring-primary');
+            } else {
+                thumb.classList.remove('ring-primary');
+            }
+        });
+
+        // Update Lightbox if open
+        if (!lightbox.classList.contains('hidden')) {
+            updateLightboxImage();
+        }
+    }
+
+    function updateLightboxImage() {
+        lightboxImg.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            lightboxImg.src = images[currentIndex];
+            lightboxImg.style.transform = 'scale(1)';
+        }, 150);
+    }
+
+    // Gallery Events
+    galleryPrev?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateView(currentIndex - 1);
+    });
+
+    galleryNext?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateView(currentIndex + 1);
+    });
+
+    thumbnails.forEach((thumb) => {
+        thumb.addEventListener('click', () => {
+            const index = parseInt(thumb.getAttribute('data-index') || '0');
+            updateView(index);
+        });
+    });
+
+    // Lightbox Events
+    mainImage?.addEventListener('click', () => {
+        lightbox.classList.remove('hidden');
+        lightboxImg.src = images[currentIndex];
+        // Fade in
+        requestAnimationFrame(() => {
+            lightbox.classList.remove('opacity-0');
+            lightboxImg.classList.remove('scale-95');
+            lightboxImg.classList.add('scale-100');
+        });
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closeLightbox() {
+        lightbox.classList.add('opacity-0');
+        lightboxImg.classList.remove('scale-100');
+        lightboxImg.classList.add('scale-95');
+        setTimeout(() => {
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    lbClose?.addEventListener('click', closeLightbox);
+    
+    lbPrev?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateView(currentIndex - 1);
+    });
+
+    lbNext?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateView(currentIndex + 1);
+    });
+
+    // Close on background click
+    lightbox?.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target.closest('.flex')) {
+             if (e.target !== lightboxImg && !e.target.closest('button')) {
+                 closeLightbox();
+             }
+        }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            updateView(currentIndex - 1);
+        } else if (e.key === 'ArrowRight') {
+            updateView(currentIndex + 1);
+        } else if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+
+    // Initialize first thumbnail active state
+    updateView(0);
+  }
+
+  // Run on initial load
+  setupGallery();
+
+  // Run on view transitions
+  document.addEventListener('astro:page-load', setupGallery);
+</script>
