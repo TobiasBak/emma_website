@@ -2,7 +2,7 @@ export const houses = [
   {
     id: 'luxury-villa',
     title: 'Luxury Villa in Beverly Hills',
-    category: 'Sale',
+    category: 'Real Estate Photography',
     price: '$4,500,000',
     location: 'Beverly Hills, CA',
     description: 'A stunning contemporary villa offering panoramic views, an infinity pool, and state-of-the-art amenities. Perfect for those who seek luxury and privacy.',
@@ -17,7 +17,7 @@ export const houses = [
   {
     id: 'modern-loft',
     title: 'Modern Downtown Loft',
-    category: 'Sale',
+    category: 'Real Estate Photography',
     price: '$850,000',
     location: 'New York, NY',
     description: 'An industrial-chic loft in the heart of the city. High ceilings, exposed brick walls, and large windows make this space bright and airy.',
@@ -32,7 +32,7 @@ export const houses = [
   {
     id: 'cozy-cottage',
     title: 'Cozy Countryside Cottage',
-    category: 'Sale',
+    category: 'Real Estate Photography',
     price: '$450,000',
     location: 'Cotswolds, UK',
     description: 'Escape to the country with this charming cottage. Features a thatched roof, a beautiful garden, and a warm fireplace.',
@@ -47,7 +47,7 @@ export const houses = [
   {
     id: 'seaside-retreat',
     title: 'Seaside Retreat',
-    category: 'Sale',
+    category: 'Real Estate Photography',
     price: '$1,200,000',
     location: 'Malibu, CA',
     description: 'Wake up to the sound of waves in this beautiful seaside home. Direct beach access and stunning ocean views from every room.',

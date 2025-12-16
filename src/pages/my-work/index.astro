@@ -6,15 +6,15 @@ import { houses } from '../../data/houses';
 <Layout title="Real Estate Photography">
   <div class="page-container">
     <div class="section-header">
-      <h1 class="page-title">Real Estate Photography</h1>
+      <h1 class="page-title">My Work</h1>
       <p class="page-subtitle">
-        Capturing the essence of every home. Professional photography for houses on sale, highlighting their best features to attract potential buyers.
+        Showcasing professional real estate photography that makes properties shine. Bringing spaces to life through exceptional imagery.
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       {houses.map((house) => (
-        <a href={`/real-estate/${house.id}`} class="block group">
+        <a href={`/my-work/${house.id}`} class="block group">
             <div class="design-card">
             <div class="relative h-80 overflow-hidden">
                 <img 
@@ -22,9 +22,7 @@ import { houses } from '../../data/houses';
                 alt={house.title}
                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                 />
-                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                    <span class="text-sm font-medium">{house.price}</span>
-                </div>
+
             </div>
             <div class="p-6">
                 <div class="flex justify-between items-start mb-2">
