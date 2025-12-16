@@ -1,35 +1,37 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import day1 from '../assets/images/day/andreas-gucklhorn-mawU2PoJWfU-unsplash.jpg';
+import day2 from '../assets/images/day/ethan-robertson-SYx3UCHZJlo-unsplash.jpg';
+import day3 from '../assets/images/day/luca-bravo-ii5JY_46xH0-unsplash.jpg';
+import night1 from '../assets/images/night/jonatan-pie-3l3RwQdHRHg-unsplash.jpg';
+import night2 from '../assets/images/night/jonatan-pie-h8nxGssjQXs-unsplash.jpg';
 
 // Placeholder data for trips
 const trips = [
   {
     id: 1,
-    title: 'Summer in Italy',
-    location: 'Amalfi Coast',
-    image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
-    date: 'June 2024',
-    isNight: false,
+    title: 'Neon Dreams',
+    location: 'Hong Kong',
+    image: night1,
+    date: 'November 2023',
+    isNight: true,
     size: 'tall'
   },
   {
     id: 2,
-    title: 'Hiking the Alps',
-    location: 'Switzerland',
-    image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1600&auto=format&fit=crop',
-    date: 'August 2024',
+    title: 'Summer in Italy',
+    location: 'Amalfi Coast',
+    image: day1,
+    date: 'June 2024',
     isNight: false,
     size: 'normal'
   },
   {
     id: 3,
-    title: 'City Lights',
-    location: 'Tokyo, Japan',
-    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1600&auto=format&fit=crop',
-    date: 'October 2023',
+    title: 'Midnight in Paris',
+    location: 'France',
+    image: night2,
+    date: 'September 2023',
     isNight: true,
     size: 'wide'
   },
@@ -37,51 +39,19 @@ const trips = [
     id: 4,
     title: 'Desert Vibes',
     location: 'Joshua Tree',
-    image: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=1600&auto=format&fit=crop',
+    image: day2,
     date: 'March 2024',
     isNight: false,
     size: 'normal'
   },
   {
     id: 5,
-    title: 'Island Hopping',
-    location: 'Greece',
-    image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
-    date: 'July 2023',
-    isNight: false,
-    size: 'big'
-  },
-  {
-    id: 6,
     title: 'Nordic Escape',
     location: 'Iceland',
-    image: 'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1600&auto=format&fit=crop',
+    image: day3,
     date: 'December 2023',
     isNight: false,
-    size: 'wide'
-  },
-  {
-    id: 7,
-    title: 'Midnight in Paris',
-    location: 'France',
-    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1600&auto=format&fit=crop',
-    date: 'September 2023',
-    isNight: true,
-    size: 'tall'
-  },
-  {
-    id: 8,
-    title: 'Neon Dreams',
-    location: 'Hong Kong',
-    image: 'https://images.unsplash.com/photo-1506318137071-a8bcbf67cc77?q=80&w=1200&auto=format&fit=crop',
-    fullRes: 'https://images.unsplash.com/photo-1506318137071-a8bcbf67cc77?q=80&w=1600&auto=format&fit=crop',
-    date: 'November 2023',
-    isNight: true,
-    size: 'normal'
+    size: 'big'
   }
 ];
 
@@ -98,7 +68,7 @@ const getSizeClass = (size) => {
 <Layout title="Home">
   <div class="page-container">
     <div class="section-header animate-fade-in-down">
-      <h1 class="page-title">Travel Journal</h1>
+      <h1 class="page-title">Hi from Emma</h1>
       <p class="page-subtitle">
         Collecting moments and memories from around the world.
       </p>
@@ -108,14 +78,14 @@ const getSizeClass = (size) => {
       {trips.map((trip) => (
         <div 
           class={`trip-card trip-card-base group opacity-0 translate-y-8 ${getSizeClass(trip.size)}`}
-          data-full-res={trip.fullRes}
+          data-full-res={trip.image.src}
           data-title={trip.title}
           data-location={trip.location}
           data-is-night={trip.isNight.toString()}
         >
           <div class="w-full h-full bg-gray-200">
              <img 
-              src={trip.image} 
+              src={trip.image.src} 
               alt={trip.title}
               class="object-cover w-full h-full min-h-96 group-hover:scale-105 transition-transform duration-700 ease-in-out"
               loading="lazy"
