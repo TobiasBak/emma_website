@@ -71,6 +71,30 @@ import linkedinIcon from '../assets/linkedin.svg';
       <a href="/about" class="nav-link-mobile">About</a>
       <a href="/contact" class="nav-link-mobile">Contact</a>
     </div>
+    <div class="pt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
+      <div class="flex items-center px-4 space-x-4">
+        <!-- Mobile Theme Toggle -->
+        <div class="flex items-center space-x-2">
+           <span class="text-xs font-medium text-text-muted">Day</span>
+            <label for="mobile-theme-toggle" class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="mobile-theme-toggle" class="sr-only peer">
+            <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent-primary dark:peer-focus:ring-accent-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent-primary"></div>
+            </label>
+           <span class="text-xs font-medium text-text-muted">Night</span>
+        </div>
+      </div>
+       <div class="mt-3 px-4 flex items-center space-x-4">
+            <a href="#" class="text-text-muted hover:text-text-main">
+            <span class="sr-only">Instagram</span>
+            <Image src={instagramIcon} alt="Instagram" class="h-6 w-6" />
+            </a>
+
+            <a href="#" class="text-text-muted hover:text-text-main">
+            <span class="sr-only">LinkedIn</span>
+            <Image src={linkedinIcon} alt="LinkedIn" class="h-6 w-6" />
+            </a>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -96,15 +120,18 @@ import linkedinIcon from '../assets/linkedin.svg';
 
     // Theme Toggle Logic
     const themeToggle = document.getElementById('nav-theme-toggle') as HTMLInputElement;
+    const mobileThemeToggle = document.getElementById('mobile-theme-toggle') as HTMLInputElement;
     
     // Function to apply theme
     const applyTheme = (isDark: boolean) => {
         if (isDark) {
             document.documentElement.classList.add('dark');
             if (themeToggle) themeToggle.checked = true;
+            if (mobileThemeToggle) mobileThemeToggle.checked = true;
         } else {
             document.documentElement.classList.remove('dark');
             if (themeToggle) themeToggle.checked = false;
+            if (mobileThemeToggle) mobileThemeToggle.checked = false;
         }
     };
 
@@ -115,19 +142,29 @@ import linkedinIcon from '../assets/linkedin.svg';
     
     applyTheme(isDark);
 
-    // Event Listener
+    // Event Listener Helper
+    const handleThemeChange = (isChecked: boolean) => {
+         if (isChecked) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: 'dark' } }));
+             if (themeToggle) themeToggle.checked = true;
+             if (mobileThemeToggle) mobileThemeToggle.checked = true;
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+            window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: 'light' } }));
+             if (themeToggle) themeToggle.checked = false;
+             if (mobileThemeToggle) mobileThemeToggle.checked = false;
+        }
+    };
+
     if (themeToggle) {
-        themeToggle.addEventListener('change', () => {
-            if (themeToggle.checked) {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-                window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: 'dark' } }));
-            } else {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-                window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: 'light' } }));
-            }
-        });
+        themeToggle.addEventListener('change', () => handleThemeChange(themeToggle.checked));
+    }
+
+    if (mobileThemeToggle) {
+        mobileThemeToggle.addEventListener('change', () => handleThemeChange(mobileThemeToggle.checked));
     }
   }
 
