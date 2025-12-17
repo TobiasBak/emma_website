@@ -31,6 +31,7 @@ import linkedinIcon from '../assets/linkedin.svg';
         <div class="flex items-center space-x-2">
             <span class="text-xs font-medium text-text-muted">Day</span>
             <label for="nav-theme-toggle" class="relative inline-flex items-center cursor-pointer">
+            <span class="sr-only">Toggle day/night theme</span>
             <input type="checkbox" id="nav-theme-toggle" class="sr-only peer">
             <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent-primary dark:peer-focus:ring-accent-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent-primary"></div>
             </label>
@@ -39,14 +40,12 @@ import linkedinIcon from '../assets/linkedin.svg';
 
         <!-- Social Icons (Desktop) -->
         <div class="flex items-center space-x-4">
-            <a href="#" class="nav-icon">
-            <span class="sr-only">Instagram</span>
-            <Image src={instagramIcon} alt="Instagram" class="h-6 w-6" />
+            <a href="https://instagram.com" class="nav-icon" aria-label="Instagram">
+            <Image src={instagramIcon} alt="" class="h-6 w-6" loading="eager" />
             </a>
 
-            <a href="#" class="nav-icon">
-            <span class="sr-only">LinkedIn</span>
-            <Image src={linkedinIcon} alt="LinkedIn" class="h-6 w-6" />
+            <a href="https://linkedin.com" class="nav-icon" aria-label="LinkedIn">
+            <Image src={linkedinIcon} alt="" class="h-6 w-6" loading="eager" />
             </a>
         </div>
       </div>
@@ -77,6 +76,7 @@ import linkedinIcon from '../assets/linkedin.svg';
         <div class="flex items-center space-x-2">
            <span class="text-xs font-medium text-text-muted">Day</span>
             <label for="mobile-theme-toggle" class="relative inline-flex items-center cursor-pointer">
+            <span class="sr-only">Toggle day/night theme</span>
             <input type="checkbox" id="mobile-theme-toggle" class="sr-only peer">
             <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent-primary dark:peer-focus:ring-accent-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent-primary"></div>
             </label>
@@ -84,14 +84,12 @@ import linkedinIcon from '../assets/linkedin.svg';
         </div>
       </div>
        <div class="mt-3 px-4 flex items-center space-x-4">
-            <a href="#" class="text-text-muted hover:text-text-main">
-            <span class="sr-only">Instagram</span>
-            <Image src={instagramIcon} alt="Instagram" class="h-6 w-6" />
+            <a href="https://instagram.com" class="text-text-muted hover:text-text-main" aria-label="Instagram">
+            <Image src={instagramIcon} alt="" class="h-6 w-6" loading="eager" />
             </a>
 
-            <a href="#" class="text-text-muted hover:text-text-main">
-            <span class="sr-only">LinkedIn</span>
-            <Image src={linkedinIcon} alt="LinkedIn" class="h-6 w-6" />
+            <a href="https://linkedin.com" class="text-text-muted hover:text-text-main" aria-label="LinkedIn">
+            <Image src={linkedinIcon} alt="" class="h-6 w-6" loading="eager" />
             </a>
       </div>
     </div>
@@ -106,7 +104,7 @@ import linkedinIcon from '../assets/linkedin.svg';
 
     if (btn && menu) {
       // Remove old listener if any (though usually fresh elements)
-      const newBtn = btn.cloneNode(true);
+      const newBtn = btn.cloneNode(true) as HTMLElement;
       if (btn.parentNode) {
         btn.parentNode.replaceChild(newBtn, btn);
       }

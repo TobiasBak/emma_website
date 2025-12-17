@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { houses } from '../../data/houses';
+import { Image } from 'astro:assets';
 ---
 
 <Layout title="Real Estate Photography">
@@ -17,9 +18,12 @@ import { houses } from '../../data/houses';
         <a href={`/my-work/${house.id}`} class="block group">
             <div class="design-card">
             <div class="relative h-80 overflow-hidden">
-                <img 
+                <Image 
                 src={house.image} 
                 alt={house.title}
+                width={600} 
+                height={320}
+                loading="eager"
                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                 />
 
