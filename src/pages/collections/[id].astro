@@ -1,0 +1,189 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { collections } from '../../data/collections';
+
+export function getStaticPaths() {
+  return collections.map((collection) => ({
+    params: { id: collection.id },
+    props: { collection },
+  }));
+}
+
+const { collection } = Astro.props;
+---
+
+<Layout title={collection.title}>
+  <div class="page-container">
+    <a href="/collections" class="inline-flex items-center text-gray-600 hover:text-black mb-8 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Collections
+    </a>
+
+    <div class="section-header mb-16">
+      <h1 class="page-title">{collection.title}</h1>
+      <p class="page-subtitle">{collection.description}</p>
+    </div>
+
+    <div class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+      {collection.images.map((img, index) => (
+        <div class="break-inside-avoid">
+            <div 
+                class="relative group overflow-hidden rounded-lg cursor-zoom-in"
+                onclick={`openLightbox(${index})`}
+            >
+                <img 
+                    src={img} 
+                    alt={`${collection.title} - photo ${index + 1}`}
+                    class="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                />
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+            </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+    <button id="lightbox-close" class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none z-50 p-2">
+      <span class="sr-only">Close</span>
+      <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <button id="lightbox-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 focus:outline-none z-50 p-4 hidden sm:block">
+      <span class="sr-only">Previous</span>
+      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    
+    <button id="lightbox-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 focus:outline-none z-50 p-4 hidden sm:block">
+      <span class="sr-only">Next</span>
+      <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+
+    <div class="flex items-center justify-center h-full w-full p-4">
+      <img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl transition-transform duration-300 scale-95" />
+    </div>
+    
+    <div class="absolute bottom-8 left-0 right-0 text-center text-white pointer-events-none">
+        <p id="lightbox-counter" class="text-sm opacity-80 font-medium tracking-wider"></p>
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ images: collection.images }} is:inline>
+    // Global scope for the onclick handler
+    window.openLightbox = function(index) {
+        // defined in setupGallery
+    };
+
+    function setupGallery() {
+        let currentIndex = 0;
+        const totalImages = images.length;
+        
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const counter = document.getElementById('lightbox-counter');
+        const closeBtn = document.getElementById('lightbox-close');
+        const prevBtn = document.getElementById('lightbox-prev');
+        const nextBtn = document.getElementById('lightbox-next');
+
+        if (!lightbox || !lightboxImg) return;
+
+        // Redefine the global function now that we have closure scope
+        window.openLightbox = (index) => {
+            currentIndex = index;
+            updateLightboxImage();
+            lightbox.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                lightbox.classList.remove('opacity-0');
+                lightboxImg.classList.remove('scale-95');
+                lightboxImg.classList.add('scale-100');
+            });
+            document.body.style.overflow = 'hidden';
+        };
+
+        function updateLightboxImage() {
+            // Fade out slightly
+            lightboxImg.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                lightboxImg.src = images[currentIndex];
+                lightboxImg.style.opacity = '1';
+                if (counter) counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+            }, 150);
+        }
+
+        function closeLightbox() {
+            lightbox.classList.add('opacity-0');
+            lightboxImg.classList.remove('scale-100');
+            lightboxImg.classList.add('scale-95');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+                lightboxImg.src = '';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        function showNext(e) {
+            e?.stopPropagation();
+            currentIndex = (currentIndex + 1) % totalImages;
+            updateLightboxImage();
+        }
+
+        function showPrev(e) {
+            e?.stopPropagation();
+            currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+            updateLightboxImage();
+        }
+
+        // Event Listeners
+        closeBtn?.addEventListener('click', closeLightbox);
+        nextBtn?.addEventListener('click', showNext);
+        prevBtn?.addEventListener('click', showPrev);
+
+        // Background click
+        lightbox.addEventListener('click', (e) => {
+             if (e.target === lightbox || e.target.closest('.flex')) {
+                if (e.target !== lightboxImg && !e.target.closest('button')) {
+                    closeLightbox();
+                }
+             }
+        });
+
+        // Keyboard
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('hidden')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') showNext();
+            if (e.key === 'ArrowLeft') showPrev();
+        });
+        
+        // Touch Swipe
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        lightbox.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        lightbox.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) showNext();
+            if (touchEndX > touchStartX + 50) showPrev();
+        }, { passive: true });
+    }
+
+    setupGallery();
+    
+    // Re-run on View Transitions
+    document.addEventListener('astro:page-load', setupGallery);
+</script>
