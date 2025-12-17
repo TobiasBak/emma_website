@@ -8,7 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "deploy": "npm run build",
+    "start-prod": "astro preview --host 0.0.0.0"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
