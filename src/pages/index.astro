@@ -344,6 +344,30 @@ const getSizeClass = (size: string) => {
         showPrev();
       }
     });
+
+    // Touch events for swipe navigation
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) {
+            // Swipe Left -> Next
+            showNext();
+        }
+        if (touchEndX > touchStartX + 50) {
+            // Swipe Right -> Prev
+            showPrev();
+        }
+    }
   }
 
   // Run on initial load

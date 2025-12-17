@@ -265,6 +265,30 @@ const { house } = Astro.props;
         }
     });
 
+    // Touch events for swipe navigation
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightbox?.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox?.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) {
+            // Swipe Left -> Next
+            updateView(currentIndex + 1);
+        }
+        if (touchEndX > touchStartX + 50) {
+            // Swipe Right -> Prev
+            updateView(currentIndex - 1);
+        }
+    }
+
     // Initialize first thumbnail active state
     updateView(0);
   }
