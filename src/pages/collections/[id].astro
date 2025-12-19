@@ -29,18 +29,19 @@ const { collection } = Astro.props;
     <div class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
       {collection.images.map((img, index) => (
         <div class="break-inside-avoid">
-            <div 
-                class="relative group overflow-hidden rounded-lg cursor-zoom-in"
+            <button 
+                class="relative group overflow-hidden rounded-lg cursor-zoom-in w-full block"
                 onclick={`openLightbox(${index})`}
+                aria-label={`View image ${index + 1} from ${collection.title}`}
             >
                 <img 
                     src={img} 
-                    alt={`${collection.title} - photo ${index + 1}`}
+                    alt={`${collection.title} ${index + 1}`}
                     class="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                 />
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
-            </div>
+            </button>
         </div>
       ))}
     </div>
@@ -81,7 +82,7 @@ const { collection } = Astro.props;
 
 <script define:vars={{ images: collection.images }} is:inline>
     // Global scope for the onclick handler
-    window.openLightbox = function(index) {
+    window.openLightbox = function() {
         // defined in setupGallery
     };
 
